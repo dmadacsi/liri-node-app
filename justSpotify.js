@@ -6,42 +6,40 @@ var request = require( "request");
 
 var spotify = new Spotify(keys.spotify);
 
-var songName = process.argv.slice(2).join(' ');
+// var songName = process.argv.slice(2).join(' ');
 
-spotify.search({ type: 'track', query: 'what i got', limit:[1] }, function(err, data,) {
-    if (err) {
-      return console.log('Error occurred: ' + err);
-    }
-//    console.log(typeof data);
-   console.log(data.tracks.items)
-//   var newData = JSON.stringify(data, null, 2); 
-//   console.log(newData);
-   
-  
-  });
-  spotifyFunctionName();
-  function spotifyFunctionName(name) {
+
+ 
+  var spotObj={
+  spotify:function() {
 //put query name in name()
-    inquirer
-      .prompt([
+ var questions=[
+      
       {
         type:"input",
         name:"song",
         message:"What song are you looking for?",
-        when:function(answers){
-          return answers.music;
-        }
-      }
-    ])
-  function music(display){
-    return function(answers){
-      return answers [display];
+        
+      },
+      
+    ];
+    
+  inquirer.prompt(questions).then(function (answers){
+    console.log(JSON.stringify(answers, null, ' '));
+    console.log(answers.song);
+    var searchMe = answers.song;
+  });
+  
+  function spotSearch(){
+  spotify.search({ type: 'track', query: `${searchMe}`, limit:[1] }, function(err, data,) {
+    if (err) {
+      return console.log('Error occurred: ' + err);
     }
-  }
-
-inquirer.prompt(answers => {
-    console.log(JSON.stringify(answers, null, '  '));
+  
+    console.log(data.tracks.items) 
+  
   });
   }
- 
-  // module.exports = spotifyFunctionName;
+
+}} 
+module.exports = spotObj;
